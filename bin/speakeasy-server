@@ -1,5 +1,5 @@
 #!/bin/bash
 
-service supervisor restart
+service supervisor start
 # supervisorctl start speakeasy-full-duplex-english-server speakeasy-full-duplex-english-worker
-tail -f /var/log/speakeasy/*.log
+supervisorctl tail -f speakeasy-full-duplex-english-server
