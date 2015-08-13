@@ -1,0 +1,4 @@
+speakeasy-server:
+	build: .
+	volumes:
+		- "lib:/lib/speakeasy-server"
