@@ -1,5 +1,7 @@
 #!/bin/bash
 
+KALDI_PATH=${PREFIX}lib/kaldi
+
 # Swap mirror with local one
 sed -i"" -e 's/http:\/\/archive.ubuntu.com\/ubuntu\//http:\/\/mirror.optus.net\/ubuntu\//g' /etc/apt/sources.list
 
@@ -8,20 +10,20 @@ apt-get install -y build-essential supervisor make python-setuptools python-dev 
 easy_install pip
 pip install ws4py==0.3.2 tornado==4.2.1
 
-cd /usr/lib/kaldi/tools
+cd $KALDI_PATH/tools
 make -j8
 
-cd /usr/lib/kaldi/src
+cd $KALDI_PATH/src
 ./configure --shared
 make depend -j8
 make -j8
 make ext -j8
 
-cd /usr/lib/kaldi/src/online
+cd $KALDI_PATH/src/online
 make depend -j8
 make -j8
 
-cd /usr/lib/kaldi/src/gst-plugin
+cd $KALDI_PATH/src/gst-plugin
 make depend -j8
 make -j8
 
