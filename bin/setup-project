@@ -1,11 +1,4 @@
 #!/bin/bash
 
-pushd lib/kaldi/
 git submodule init
 git submodule update
-popd
-
-pushd lib/kaldi-gstreamer-server/
-git submodule init
-git submodule update
-popd
