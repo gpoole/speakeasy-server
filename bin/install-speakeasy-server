@@ -1,30 +1,45 @@
 #!/bin/bash
 
-KALDI_PATH=${PREFIX}lib/kaldi
+KALDI_ROOT=${PREFIX}lib/kaldi
 
 # Swap mirror with local one
 sed -i"" -e 's/http:\/\/archive.ubuntu.com\/ubuntu\//http:\/\/mirror.optus.net\/ubuntu\//g' /etc/apt/sources.list
 
 apt-get update
-apt-get install -y build-essential supervisor make python-setuptools python-dev python-yaml python-anyjson python-gi libgstreamer1.0-dev gstreamer1.0-plugins-good gstreamer1.0-tools gstreamer1.0-pulseaudio automake libtool autoconf wget git subversion libatlas3-base
+apt-get install -y curl build-essential supervisor make python-setuptools python-dev python-yaml python-anyjson python-gi libgstreamer1.0-dev gstreamer1.0-plugins-good gstreamer1.0-tools gstreamer1.0-pulseaudio automake libtool autoconf wget git subversion libatlas3-base
 easy_install pip
 pip install ws4py==0.3.2 tornado==4.2.1
 
-cd $KALDI_PATH/tools
+cd $KALDI_ROOT/tools
 make -j8
 
-cd $KALDI_PATH/src
+cd $KALDI_ROOT/src
 ./configure --shared
 make depend -j8
 make -j8
 make ext -j8
 
-cd $KALDI_PATH/src/online
-make depend -j8
-make -j8
+# cd $KALDI_ROOT/src/online
+# make depend -j8
+# make -j8
 
-cd $KALDI_PATH/src/gst-plugin
-make depend -j8
-make -j8
+# cd $KALDI_PATH/src/gst-plugin
+# make depend -j8
+# make -j8
+
+cd /usr/src
+wget -O - http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2 | tar -jx
+cd jansson-2.7
+./configure --prefix /usr
+make
+make check
+make install
+
+cd ${PREFIX}lib/gst-kaldi-nnet2-online/src
+make depend
+make
+
+cd ../test/models/
+./download-tedlium-nnet2.sh
 
 mkdir -p /var/log/speakeasy
