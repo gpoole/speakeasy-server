@@ -5,7 +5,10 @@ if [ -z "$SPEAKEASY_ROOT" ]; then
 fi
 
 export KALDI_ROOT=${SPEAKEASY_ROOT}lib/kaldi
-MAKE_ARGS=-j8
+
+if [ -z "$MAKE_ARGS" ]; then
+	MAKE_ARGS=-j8
+fi
 
 # Swap mirror with local one
 sed -i"" -e 's/http:\/\/archive.ubuntu.com\/ubuntu\//http:\/\/mirror.optus.net\/ubuntu\//g' /etc/apt/sources.list
