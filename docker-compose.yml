@@ -1,4 +1,3 @@
-speakeasy-server:
-	build: .
-	volumes:
-		- "lib:/lib/speakeasy-server"
+speakeasy:
+  build: .
+  entrypoint: speakeasy-server

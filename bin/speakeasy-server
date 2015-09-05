@@ -1,5 +1,7 @@
 #!/bin/bash
 
-service supervisor start
 # supervisorctl start speakeasy-full-duplex-english-server speakeasy-full-duplex-english-worker
-supervisorctl tail -f speakeasy-full-duplex-english-server
+# supervisorctl tail -f speakeasy-full-duplex-english-server
+# supervisord --nodaemon --configuration=etc/speakeasy/speakeasy.conf
+service supervisor start
+cat /var/log/supervisord/*
