@@ -10,7 +10,7 @@ if [ -z "$MAKE_ARGS" ]; then
 	MAKE_ARGS=-j8
 fi
 
-./setup-project
+# ./setup-project
 
 # Swap mirror with local one
 # sed -i"" -e 's/http:\/\/archive.ubuntu.com\/ubuntu\//http:\/\/mirror.optus.net\/ubuntu\//g' /etc/apt/sources.list
