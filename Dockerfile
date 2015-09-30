@@ -8,7 +8,7 @@ COPY bin/speakeasy-server /usr/bin/speakeasy-server
 COPY etc/speakeasy/speakeasy.conf /etc/supervisor/conf.d/speakeasy.conf
 RUN chmod +x /usr/bin/install-speakeasy-server /usr/bin/speakeasy-server
 
-RUN PREFIX=/usr/ /usr/bin/install-speakeasy-server
+RUN SPEAKEASY_ROOT=/usr/lib/speakeasy/ /usr/bin/install-speakeasy-server
 
 ENTRYPOINT /usr/bin/speakeasy-server
 
