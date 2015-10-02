@@ -16,7 +16,10 @@ fi
 mkdir -p /var/log/speakeasy
 
 apt-get update
-apt-get install -y curl build-essential supervisor make python-setuptools python-dev python-yaml python-anyjson python-gi libgstreamer1.0-dev gstreamer1.0-plugins-good gstreamer1.0-tools gstreamer1.0-pulseaudio automake libtool autoconf wget git subversion libatlas3-base
+apt-get install -y curl build-essential supervisor make python-setuptools python-dev python-yaml \
+						python-anyjson python-gi libgstreamer1.0-dev gstreamer1.0-plugins-good \
+						gstreamer1.0-tools gstreamer1.0-pulseaudio automake libtool autoconf wget \
+						git subversion libatlas3-base
 easy_install pip
 pip install ws4py==0.3.2 tornado==4.2.1
 
@@ -24,7 +27,7 @@ cd $KALDI_ROOT/tools
 make ${MAKE_ARGS}
 
 cd $KALDI_ROOT/src
-./configure --shared
+./configure --shared --mathlib=ATLAS
 make depend ${MAKE_ARGS}
 make ${MAKE_ARGS}
 make ext ${MAKE_ARGS}
@@ -46,4 +49,4 @@ make depend ${MAKE_ARGS}
 make ${MAKE_ARGS}
 
 cd ${SPEAKEASY_ROOT}lib/kaldi-gstreamer-server/test/models
-./download-tedlium-nnet2.sh
+curl -s https://phon.ioc.ee/~tanela/tedlium_nnet_ms_sp_online.tgz | tar zxv
