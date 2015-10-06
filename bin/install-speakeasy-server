@@ -6,6 +6,11 @@ fi
 
 export KALDI_ROOT=${SPEAKEASY_ROOT}lib/kaldi
 
+function fail() {
+	echo $@
+	exit 1
+}
+
 if [ -z "$MAKE_ARGS" ]; then
 	MAKE_ARGS=-j8
 fi
@@ -15,38 +20,40 @@ fi
 
 mkdir -p /var/log/speakeasy
 
-apt-get update
-apt-get install -y curl build-essential supervisor make python-setuptools python-dev python-yaml \
-						python-anyjson python-gi libgstreamer1.0-dev gstreamer1.0-plugins-good \
-						gstreamer1.0-tools gstreamer1.0-pulseaudio automake libtool autoconf wget \
-						git subversion libatlas3-base
 easy_install pip
 pip install ws4py==0.3.2 tornado==4.2.1
 
 cd $KALDI_ROOT/tools
-make ${MAKE_ARGS}
+make ${MAKE_ARGS} || fail "Failed to make kaldi tools"
+./install_portaudio.sh
 
 cd $KALDI_ROOT/src
 ./configure --shared --mathlib=ATLAS
-make depend ${MAKE_ARGS}
-make ${MAKE_ARGS}
-make ext ${MAKE_ARGS}
+make depend ${MAKE_ARGS} || fail "Failed to make kaldi"
+make ${MAKE_ARGS} || fail "Failed to make kaldi"
+make ext ${MAKE_ARGS} || fail "Failed to make kaldi"
 
-cd /usr/src
-wget -O - http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2 | tar -jx
-cd jansson-2.7
+# cd $KALDI_ROOT/src/online
+# make depend ${MAKE_ARGS} || fail "Failed to make kaldi/online"
+# make ${MAKE_ARGS} || fail "Failed to make kaldi/online"
+
+# cd $KALDI_ROOT/src/online2
+# make depend ${MAKE_ARGS} || fail "Failed to make kaldi/online2"
+# make ${MAKE_ARGS} || fail "Failed to make kaldi/online2"
+
+cd /usr/src/jansson-2.7
 ./configure --prefix /usr
-make ${MAKE_ARGS}
-make check ${MAKE_ARGS}
-make install ${MAKE_ARGS}
+make ${MAKE_ARGS} || fail "Failed to make jansson"
+make check ${MAKE_ARGS} || fail "Failed to make jansson"
+make install ${MAKE_ARGS} || fail "Failed to make jansson"
 
 cd ${SPEAKEASY_ROOT}lib/gst-kaldi-nnet2-online/src
-make depend ${MAKE_ARGS}
-make ${MAKE_ARGS}
+make depend ${MAKE_ARGS} || fail "Failed to make gst-kaldi-nnet2-online"
+make ${MAKE_ARGS} || fail "Failed to make gst-kaldi-nnet2-online"
 
 cd ${SPEAKEASY_ROOT}lib/kaldi/src/gst-plugin
-make depend ${MAKE_ARGS}
-make ${MAKE_ARGS}
+make depend ${MAKE_ARGS} || fail "Failed to make gst-plugin"
+make ${MAKE_ARGS} || fail "Failed to make gst-plugin"
 
-cd ${SPEAKEASY_ROOT}lib/kaldi-gstreamer-server/test/models
-curl -s https://phon.ioc.ee/~tanela/tedlium_nnet_ms_sp_online.tgz | tar zxv
+# cd ${SPEAKEASY_ROOT}lib/kaldi-gstreamer-server/test/models
+# curl -s https://phon.ioc.ee/~tanela/tedlium_nnet_ms_sp_online.tgz | tar zxv

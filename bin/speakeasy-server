@@ -4,4 +4,4 @@
 # supervisorctl tail -f speakeasy-full-duplex-english-server
 # supervisord --nodaemon --configuration=etc/speakeasy/speakeasy.conf
 service supervisor start
-cat /var/log/supervisord/*
+tail -f /var/log/supervisor/* /var/log/speakeasy/*
